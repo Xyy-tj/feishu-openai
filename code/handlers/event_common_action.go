@@ -196,7 +196,7 @@ func (*SummaryAction) Execute(a *ActionInfo) bool {
 		aiMode := a.handler.sessionCache.GetAIMode(*a.info.sessionId)
 		replyMsg(*a.ctx, "本次对话进入总结外部网页功能，本功能处于内测版本，暂无法通过流式传输，请稍候片刻，本次查询预计花费10~20s。开发版本目前尚不稳定，如长时间无响应请重新请求", a.info.msgId)
 		fmt.Println("触发总结模式")
-		completions, err := a.handler.gpt.Completions_tools(msg, aiMode)
+		completions, err := a.handler.gpt.CompletionsTools(msg, aiMode)
 		if err != nil {
 			replyMsg(*a.ctx, fmt.Sprintf(
 				"🤖️：消息机器人摆烂了，请稍后再试～\n错误信息: %v", err), a.info.msgId)

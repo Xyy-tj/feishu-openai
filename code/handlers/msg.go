@@ -161,14 +161,6 @@ func withMainMd(msg string) larkcard.MessageCardElement {
 	if i != nil {
 		return nil
 	}
-	// mainElement := larkcard.NewMessageCardDiv().
-	// 	Fields([]*larkcard.MessageCardField{larkcard.NewMessageCardField().
-	// 		Text(larkcard.NewMessageCardLarkMd().
-	// 			Content(msg).
-	// 			Build()).
-	// 		IsShort(true).
-	// 		Build()}).
-	// 	Build()
 	mainElement := larkcard.NewMessageCardMarkdown().
 		Content(msg).Build()
 	return mainElement

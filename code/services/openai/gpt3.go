@@ -97,3 +97,33 @@ func (gpt *ChatGPT) Completions(msg []Messages, aiMode AIMode) (resp Messages,
 	}
 	return resp, err
 }
+
+func (gpt *ChatGPT) CompletionsTools(msg []Messages, aiMode AIMode) (resp Messages,
+	err error) {
+	requestBody := ChatGPTRequestBody{
+		Model:            "gpt-4-all",
+		Messages:         msg,
+		MaxTokens:        gpt.MaxTokens,
+		Temperature:      aiMode,
+		TopP:             1,
+		FrequencyPenalty: 0,
+		PresencePenalty:  0,
+	}
+	gptResponseBody := &ChatGPTResponseBody{}
+	url := gpt.FullUrl("chat/completions")
+	//fmt.Println(url)
+	logger.Debug(url)
+	logger.Debug("request body ", requestBody)
+	if url == "" {
+		return resp, errors.New("无法获取openai请求地址")
+	}
+	err = gpt.sendRequestWithBodyType(url, "POST", jsonBody, requestBody, gptResponseBody)
+	if err == nil && len(gptResponseBody.Choices) > 0 {
+		resp = gptResponseBody.Choices[0].Message
+	} else {
+		logger.Errorf("ERROR %v", err)
+		resp = Messages{}
+		err = errors.New("openai 请求失败")
+	}
+	return resp, err
+}
