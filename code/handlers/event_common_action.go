@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"fmt"
-
 	"start-feishubot/initialization"
 	"start-feishubot/services/openai"
 	"start-feishubot/utils"
@@ -67,7 +66,7 @@ type EmptyAction struct { /*空消息*/
 
 func (*EmptyAction) Execute(a *ActionInfo) bool {
 	if len(a.info.qParsed) == 0 {
-		sendMsg(*a.ctx, "🤖️：你想知道什么呢~", a.info.chatId)
+		// sendMsg(*a.ctx, "🤖️：你想知道什么呢~", a.info.chatId)
 		fmt.Println("msgId", *a.info.msgId,
 			"message.text is empty")
 
@@ -163,6 +162,50 @@ func (*AIModeAction) Execute(a *ActionInfo) bool {
 	if _, foundMode := utils.EitherCutPrefix(a.info.qParsed,
 		"/ai_mode", "发散模式"); foundMode {
 		SendAIModeListsCard(*a.ctx, a.info.sessionId, a.info.msgId, openai.AIModeStrs)
+		return false
+	}
+	return true
+}
+
+type DevAction struct { /*Markdown测试*/
+}
+
+func (*DevAction) Execute(a *ActionInfo) bool {
+	if _, foundMode := utils.EitherCutPrefix(a.info.qParsed,
+		"/dev_test", "开发模式"); foundMode {
+		SendDevTestCard(*a.ctx, a.info.sessionId, a.info.msgId, openai.AIModeStrs)
+		return false
+	}
+	return true
+}
+
+type SummaryAction struct { /*URL总结功能*/
+}
+
+func (*SummaryAction) Execute(a *ActionInfo) bool {
+	if _, foundSummary := utils.EitherCutPrefix(a.info.qParsed, "/summary",
+		"总结"); foundSummary {
+		msg := a.handler.sessionCache.GetMsg(*a.info.sessionId)
+		// 如果没有提示词，默认模拟ChatGPT
+		msg = setDefaultPrompt(msg)
+		msg = append(msg, openai.Messages{
+			Role: "user", Content: a.info.qParsed,
+		})
+
+		// get ai mode as temperature
+		aiMode := a.handler.sessionCache.GetAIMode(*a.info.sessionId)
+		replyMsg(*a.ctx, "本次对话进入总结外部网页功能，本功能处于内测版本，暂无法通过流式传输，请稍候片刻，本次查询预计花费10~20s。开发版本目前尚不稳定，如长时间无响应请重新请求", a.info.msgId)
+		fmt.Println("触发总结模式")
+		completions, err := a.handler.gpt.Completions_tools(msg, aiMode)
+		if err != nil {
+			replyMsg(*a.ctx, fmt.Sprintf(
+				"🤖️：消息机器人摆烂了，请稍后再试～\n错误信息: %v", err), a.info.msgId)
+			return false
+		}
+		msg = append(msg, completions)
+		a.handler.sessionCache.SetMsg(*a.info.sessionId, msg)
+		replyMsg(*a.ctx, completions.Content, a.info.msgId)
+		// sendUrlSummaryCard(*a.ctx, a.info.sessionId, a.info.msgId, openai.AIModeStrs)
 		return false
 	}
 	return true

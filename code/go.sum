@@ -184,6 +184,8 @@ github.com/larksuite/oapi-sdk-gin v1.0.0 h1:pf2JyCSECZ2ra16JoQEgbl7PPaaOpoAEBno+
 github.com/larksuite/oapi-sdk-gin v1.0.0/go.mod h1:17QKeJMEkIYBUOrUoP0HBVErfzdu7cuJ9XiXitUwe/s=
 github.com/larksuite/oapi-sdk-go/v3 v3.0.14 h1:WxRAudM5eTTBZgmXs0BRp3Pq8/sxsc0lcfIl43veDJI=
 github.com/larksuite/oapi-sdk-go/v3 v3.0.14/go.mod h1:FKi8vBgtkBt/xNRQUwdWvoDmsPh7/wP75Sn5IBIBQLk=
+github.com/larksuite/oapi-sdk-go/v3 v3.1.4 h1:qrCvFILeYufB1SudY2KOs1iqSw+x1EsY4NhC41i0cUE=
+github.com/larksuite/oapi-sdk-go/v3 v3.1.4/go.mod h1:F4MLXkfdc/7WAJPLy4lJ0R6VqCxKgqWYS1uYY84p3SI=
 github.com/leodido/go-urn v1.2.1 h1:BqpAaACuzVSgi/VLzGZIobT2z4v53pjosyNd9Yv6n/w=
 github.com/leodido/go-urn v1.2.1/go.mod h1:zt4jvISO2HfUBqxjfIshjdMTYS56ZS/qv49ictyFfxY=
 github.com/magiconair/properties v1.8.7 h1:IeQXZAiQcpL9mgcAe1Nu6cX9LLw6ExEHKjN0VQdvPDY=

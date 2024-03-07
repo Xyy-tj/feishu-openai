@@ -161,14 +161,16 @@ func withMainMd(msg string) larkcard.MessageCardElement {
 	if i != nil {
 		return nil
 	}
-	mainElement := larkcard.NewMessageCardDiv().
-		Fields([]*larkcard.MessageCardField{larkcard.NewMessageCardField().
-			Text(larkcard.NewMessageCardLarkMd().
-				Content(msg).
-				Build()).
-			IsShort(true).
-			Build()}).
-		Build()
+	// mainElement := larkcard.NewMessageCardDiv().
+	// 	Fields([]*larkcard.MessageCardField{larkcard.NewMessageCardField().
+	// 		Text(larkcard.NewMessageCardLarkMd().
+	// 			Content(msg).
+	// 			Build()).
+	// 		IsShort(true).
+	// 		Build()}).
+	// 	Build()
+	mainElement := larkcard.NewMessageCardMarkdown().
+		Content(msg).Build()
 	return mainElement
 }
 
@@ -181,7 +183,7 @@ func withMainText(msg string) larkcard.MessageCardElement {
 	}
 	mainElement := larkcard.NewMessageCardDiv().
 		Fields([]*larkcard.MessageCardField{larkcard.NewMessageCardField().
-			Text(larkcard.NewMessageCardPlainText().
+			Text(larkcard.NewMessageCardLarkMd().
 				Content(msg).
 				Build()).
 			IsShort(false).
@@ -753,7 +755,7 @@ func sendNewTopicCard(ctx context.Context,
 	sessionId *string, msgId *string, content string) {
 	newCard, _ := newSendCard(
 		withHeader("👻️ 已开启新的话题", larkcard.TemplateBlue),
-		withMainText(content),
+		withMainMd(content),
 		withNote("提醒：点击对话框参与回复，可保持话题连贯"))
 	replyCard(ctx, msgId, newCard)
 }
@@ -762,7 +764,7 @@ func sendOldTopicCard(ctx context.Context,
 	sessionId *string, msgId *string, content string) {
 	newCard, _ := newSendCard(
 		withHeader("🔃️ 上下文的话题", larkcard.TemplateBlue),
-		withMainText(content),
+		withMainMd(content),
 		withNote("提醒：点击对话框参与回复，可保持话题连贯"))
 	replyCard(ctx, msgId, newCard)
 }
@@ -771,7 +773,7 @@ func sendVisionTopicCard(ctx context.Context,
 	sessionId *string, msgId *string, content string) {
 	newCard, _ := newSendCard(
 		withHeader("🕵️图片推理结果", larkcard.TemplateBlue),
-		withMainText(content),
+		withMainMd(content),
 		withNote("让LLM和你一起推理图片的内容~"))
 	replyCard(ctx, msgId, newCard)
 }
@@ -780,7 +782,7 @@ func sendHelpCard(ctx context.Context,
 	sessionId *string, msgId *string) {
 	newCard, _ := newSendCard(
 		withHeader("🎒需要帮助吗？", larkcard.TemplateBlue),
-		withMainMd("**🤠你好呀~ 我来自企联AI，一款基于OpenAI的智能助手！**"),
+		withMainMd("**🤠你好呀~ 我来自巡智科技，一款基于OpenAI-GPT4的智能助手！**"),
 		withSplitLine(),
 		withMdAndExtraBtn(
 			"** 🆑 清除话题上下文**\n文本回复 *清除* 或 */clear*",
@@ -792,20 +794,16 @@ func sendHelpCard(ctx context.Context,
 			}, larkcard.MessageCardButtonTypeDanger)),
 		withSplitLine(),
 		withMainMd("🤖 **发散模式选择** \n"+" 文本回复 *发散模式* 或 */ai_mode*"),
-		withSplitLine(),
-		withMainMd("🛖 **内置角色列表** \n"+" 文本回复 *角色列表* 或 */roles*"),
+		// withSplitLine(),
+		// withMainMd("🛖 **内置角色列表** \n"+" 文本回复 *角色列表* 或 */roles*"),
 		withSplitLine(),
 		withMainMd("🥷 **角色扮演模式**\n文本回复*角色扮演* 或 */system*+空格+角色信息"),
-		withSplitLine(),
-		withMainMd("🎤 **AI语音对话**\n私聊模式下直接发送语音"),
+		// withSplitLine(),
+		// withMainMd("🎤 **AI语音对话**\n私聊模式下直接发送语音"),
 		withSplitLine(),
 		withMainMd("🎨 **图片创作模式**\n回复*图片创作* 或 */picture*"),
 		withSplitLine(),
 		withMainMd("🕵️ **图片推理模式** \n"+" 文本回复 *图片推理* 或 */vision*"),
-		withSplitLine(),
-		withMainMd("🎰 **Token余额查询**\n回复*余额* 或 */balance*"),
-		withSplitLine(),
-		withMainMd("🔃️ **历史话题回档** 🚧\n"+" 进入话题的回复详情页,文本回复 *恢复* 或 */reload*"),
 		withSplitLine(),
 		withMainMd("📤 **话题内容导出** 🚧\n"+" 文本回复 *导出* 或 */export*"),
 		withSplitLine(),
@@ -894,6 +892,14 @@ func SendAIModeListsCard(ctx context.Context,
 		withHeader("🤖 发散模式选择", larkcard.TemplateIndigo),
 		withAIModeBtn(sessionId, aiModeStrs),
 		withNote("提醒：选择内置模式，让AI更好的理解您的需求。"))
+	replyCard(ctx, msgId, newCard)
+}
+
+func SendDevTestCard(ctx context.Context,
+	sessionId *string, msgId *string, aiModeStrs []string) {
+	newCard, _ := newSendCard(
+		withHeader("🤖 Markdown测试", larkcard.TemplateIndigo),
+		withMainMd("**这是一个测试内容** \n```\nprint('helloworld')\n```\n"))
 	replyCard(ctx, msgId, newCard)
 }
 

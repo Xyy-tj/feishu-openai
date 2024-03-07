@@ -6,13 +6,14 @@ import (
 	"start-feishubot/initialization"
 	"start-feishubot/logger"
 
+	"start-feishubot/services/openai"
+
 	"github.com/gin-gonic/gin"
 	sdkginext "github.com/larksuite/oapi-sdk-gin"
 	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
 	"github.com/larksuite/oapi-sdk-go/v3/event/dispatcher"
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 	"github.com/spf13/pflag"
-	"start-feishubot/services/openai"
 )
 
 func main() {
