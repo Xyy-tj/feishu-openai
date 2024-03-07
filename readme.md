@@ -501,5 +501,7 @@ docker compose down
 
 开源社区：https://github.com/ConnectAI-E
 
+产品日志：https://www.connectai-e.com/logger
+
 
 
